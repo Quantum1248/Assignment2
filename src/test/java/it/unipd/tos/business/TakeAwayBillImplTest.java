@@ -36,12 +36,66 @@ public class TakeAwayBillImplTest {
     }
 
     @Test
-    public void testGetOrderPrice() throws Exception {
+    public void testGetOrderPriceWithoutDiscount() throws Exception {
         List<MenuItem> orders = new LinkedList<>();
         orders.add(iceCream);
         orders.add(drink);
 
         assertEquals(takeAwayBill.getOrderPrice(orders, user), iceCream.getPrice() + drink.getPrice());
+    }
+
+    @Test
+    public void testGetOrderPriceWithOnlyFiveIceCream() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        double price = 0;
+        for (int i = 1; i < 6; i++) {
+            orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato" + i, i));
+            price += i;
+        }
+
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), price);
+    }
+
+    @Test
+    public void testGetOrderPriceWithFiveIceCreamAndOtherThings() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        double price = 0;
+        for (int i = 1; i < 6; i++) {
+            orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato" + i, i));
+            price += i;
+        }
+        orders.add(pudding);
+        price += pudding.getPrice();
+        orders.add(drink);
+        price += drink.getPrice();
+
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), price);
+    }
+
+    @Test
+    public void testGetOrderPriceWithSixIceCream() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        double price = 0;
+        for (int i = 1; i < 7; i++) {
+            orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato" + i, i));
+            price += i;
+        }
+        price -= 0.5;
+
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), price);
+    }
+
+    @Test
+    public void testGetOrderPriceWithMoreThanSixIceCream() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        double price = 0;
+        for (int i = 2; i < 10; i++) {
+            orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato" + i, i));
+            price += i;
+        }
+        price -= 1;
+
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), price);
     }
 
     @Test
