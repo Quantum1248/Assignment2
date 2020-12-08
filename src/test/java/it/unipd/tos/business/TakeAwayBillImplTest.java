@@ -4,6 +4,8 @@
 
 package it.unipd.tos.business;
 
+import it.unipd.tos.business.exception.RestaurantBillException;
+import it.unipd.tos.business.exception.TakeAwayBillException;
 import it.unipd.tos.model.MenuItem;
 import it.unipd.tos.model.User;
 
@@ -99,7 +101,7 @@ public class TakeAwayBillImplTest {
     }
 
     @Test
-    public void testGetOrderPriceEqualsFifthy() throws Exception {
+    public void testGetOrderPriceEqualsFifty() throws Exception {
         List<MenuItem> orders = new LinkedList<>();
         double price = 50;
         orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato", price));
@@ -108,12 +110,34 @@ public class TakeAwayBillImplTest {
     }
 
     @Test
-    public void testGetOrderPriceOverFifthy() throws Exception {
+    public void testGetOrderPriceOverFifty() throws Exception {
         List<MenuItem> orders = new LinkedList<>();
         double price = 51;
         orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato", price));
         price *= 0.9;
         assertEquals(takeAwayBill.getOrderPrice(orders, user), price);
+    }
+
+    @Test
+    public void testGetOrderPriceWithThirtyOrder() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        double price = 0;
+        for (int i = 1; i < 30; i++) {
+            orders.add(new MenuItem(MenuItem.ItemType.BEVANDA, "Drink" + i, 1));
+            price += 1;
+        }
+
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), price);
+    }
+
+    @Test
+    public void testGetOrderPriceWithMoreThanThirtyOrder() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        for (int i = 1; i < 32; i++) {
+            orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato" + i, i));
+        }
+
+        assertThrows(RestaurantBillException.class, () -> takeAwayBill.getOrderPrice(orders, user));
     }
 
     @Test

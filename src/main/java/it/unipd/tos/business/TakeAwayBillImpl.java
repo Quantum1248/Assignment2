@@ -7,13 +7,14 @@ package it.unipd.tos.business;
 import java.util.List;
 
 import it.unipd.tos.business.exception.RestaurantBillException;
+import it.unipd.tos.business.exception.TakeAwayBillException;
 import it.unipd.tos.model.MenuItem;
 import it.unipd.tos.model.User;
 
 public class TakeAwayBillImpl implements TakeAwayBill {
 
     @Override
-    public double getOrderPrice(List<MenuItem> itemsOrdered, User user)
+    public double getOrderPrice(List<MenuItem> itemsOrdered, User user) 
     throws RestaurantBillException {
         if (itemsOrdered == null) {
             throw new IllegalArgumentException("ItemsOrder is null");
@@ -23,6 +24,10 @@ public class TakeAwayBillImpl implements TakeAwayBill {
         }
         if (user == null) {
             throw new IllegalArgumentException("User is null");
+        }
+        if (itemsOrdered.size() > 30) {
+            System.out.println("Can't order more than 30 items");
+            throw new RestaurantBillException();
         }
 
         int iceCreamNumber = 0;
