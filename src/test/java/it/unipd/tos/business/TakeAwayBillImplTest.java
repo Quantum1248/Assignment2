@@ -99,6 +99,24 @@ public class TakeAwayBillImplTest {
     }
 
     @Test
+    public void testGetOrderPriceEqualsFifthy() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        double price = 50;
+        orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato", price));
+
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), price);
+    }
+
+    @Test
+    public void testGetOrderPriceOverFifthy() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        double price = 51;
+        orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato", price));
+        price *= 0.9;
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), price);
+    }
+
+    @Test
     public void testGetOrderPriceNullList() throws Exception {
         assertThrows(IllegalArgumentException.class, () -> takeAwayBill.getOrderPrice(null, user));
     }

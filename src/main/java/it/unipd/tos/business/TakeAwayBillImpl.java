@@ -14,7 +14,7 @@ public class TakeAwayBillImpl implements TakeAwayBill {
 
     @Override
     public double getOrderPrice(List<MenuItem> itemsOrdered, User user)
-     throws RestaurantBillException {
+    throws RestaurantBillException {
         if (itemsOrdered == null) {
             throw new IllegalArgumentException("ItemsOrder is null");
         }
@@ -36,6 +36,10 @@ public class TakeAwayBillImpl implements TakeAwayBill {
                     minIceCreamPrice = m.getPrice();
                 }
             }
+        }
+
+        if (result > 50) {
+            result *= 0.9;
         }
 
         if (iceCreamNumber > 5) {
