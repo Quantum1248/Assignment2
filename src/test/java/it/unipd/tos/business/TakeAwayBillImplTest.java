@@ -155,6 +155,41 @@ public class TakeAwayBillImplTest {
     }
 
     @Test
+    public void testGetOrderPriceGiftUnder18() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        User u = new User(1, "Nome", "Cognome", 10);
+        double price = 0;
+        for (int i = 1; i < 6; i++) {
+            orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato" + i, i));
+            price += i;
+        }
+        takeAwayBill.getOrderPrice(orders, user);
+        takeAwayBill.getOrderPrice(orders, user);
+        takeAwayBill.getOrderPrice(orders, user);
+        takeAwayBill.getOrderPrice(orders, user);
+        takeAwayBill.getOrderPrice(orders, user);
+        price -= 1;
+        assertEquals(takeAwayBill.getOrderPrice(orders, u), price);
+    }
+
+    @Test
+    public void testGetOrderPriceGiftOver18() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        User u = new User(1, "Nome", "Cognome", 19);
+        double price = 0;
+        for (int i = 1; i < 6; i++) {
+            orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato" + i, i));
+            price += i;
+        }
+        takeAwayBill.getOrderPrice(orders, user);
+        takeAwayBill.getOrderPrice(orders, user);
+        takeAwayBill.getOrderPrice(orders, user);
+        takeAwayBill.getOrderPrice(orders, user);
+        takeAwayBill.getOrderPrice(orders, user);
+        assertEquals(takeAwayBill.getOrderPrice(orders, u), price);
+    }
+
+    @Test
     public void testGetOrderPriceNullList() throws Exception {
         assertThrows(IllegalArgumentException.class, () -> takeAwayBill.getOrderPrice(null, user));
     }

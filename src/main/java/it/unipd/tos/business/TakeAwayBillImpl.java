@@ -13,6 +13,14 @@ import it.unipd.tos.model.User;
 
 public class TakeAwayBillImpl implements TakeAwayBill {
 
+    private int totalGiftedIceCream;
+    private int rng;
+
+    public TakeAwayBillImpl() {
+        totalGiftedIceCream = 0;
+        rng = 0;
+    }
+
     @Override
     public double getOrderPrice(List<MenuItem> itemsOrdered, User user) 
     throws RestaurantBillException {
@@ -51,6 +59,21 @@ public class TakeAwayBillImpl implements TakeAwayBill {
 
         if (iceCreamNumber > 5) {
             result = result - minIceCreamPrice / 2;
+        }
+
+        if (user.getAge() <= 18 && totalGiftedIceCream <= 10) {
+            if (rng == 5) {
+                for (MenuItem m : itemsOrdered) {
+                    if (m.getItemType() == MenuItem.ItemType.GELATO) {
+                        rng = 0;
+                        totalGiftedIceCream++;
+                        result -= m.getPrice();
+                        break;
+                    }
+                }
+            } else {
+                rng++;
+            }
         }
         return result;
     }
