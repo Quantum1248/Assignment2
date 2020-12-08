@@ -45,13 +45,13 @@ public class TakeAwayBillImpl implements TakeAwayBill {
 
         if (result > 50) {
             result *= 0.9;
+        } else if (result < 10) {
+            result += 0.5;
         }
 
         if (iceCreamNumber > 5) {
             result = result - minIceCreamPrice / 2;
         }
-
         return result;
     }
-
 }

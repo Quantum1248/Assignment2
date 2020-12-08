@@ -15,8 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.text.IconView;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +41,7 @@ public class TakeAwayBillImplTest {
         orders.add(iceCream);
         orders.add(drink);
 
-        assertEquals(takeAwayBill.getOrderPrice(orders, user), iceCream.getPrice() + drink.getPrice());
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), iceCream.getPrice() + drink.getPrice() + 0.5);
     }
 
     @Test
@@ -138,6 +136,22 @@ public class TakeAwayBillImplTest {
         }
 
         assertThrows(RestaurantBillException.class, () -> takeAwayBill.getOrderPrice(orders, user));
+    }
+
+    @Test
+    public void testGetOrderPriceEqualTen() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato", 10));
+
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), 10);
+    }
+
+    @Test
+    public void testGetOrderPriceLessThanTen() throws Exception {
+        List<MenuItem> orders = new LinkedList<>();
+        orders.add(new MenuItem(MenuItem.ItemType.GELATO, "Gelato", 9));
+
+        assertEquals(takeAwayBill.getOrderPrice(orders, user), 9.5);
     }
 
     @Test
